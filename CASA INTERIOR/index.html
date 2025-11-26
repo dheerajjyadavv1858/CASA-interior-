@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CASA INTERIOR STUDIO | Premium Interior Design</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              casa: {
+                dark: '#050709',
+                card: '#0c0f13',
+                beige: '#f4efe7',
+                gold: '#c9a26b',
+                muted: '#b3a89a',
+                text: '#f8f4ee'
+              }
+            },
+            fontFamily: {
+              serif: ['"Playfair Display"', 'serif'],
+              sans: ['"Poppins"', 'sans-serif'],
+            },
+            borderRadius: {
+              'xl': '24px',
+              '2xl': '24px', 
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+      body {
+        background-color: #050709;
+        color: #f8f4ee;
+        font-family: 'Poppins', sans-serif;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .glass-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(201, 162, 107, 0.3);
+      }
+    </style>
+
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Import Map for Modules -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.292.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import { 
+        Menu, X, ArrowRight, DraftingCompass, Home, Building2, Ruler, 
+        Key, Sofa, CheckCircle2, Box, Clock, Users, Palette, Gem, 
+        ArrowUpRight, Star, Quote, Mail, Phone, MapPin, 
+        Instagram, Facebook, Linkedin, Twitter 
+      } from 'lucide-react';
+
+      // --- TYPES ---
+      
+      interface ServiceItem {
+        id: string;
+        title: string;
+        description: string;
+        icon: any;
+      }
+
+      interface ProjectItem {
+        id: string;
+        title: string;
+        category: string;
+        imageUrl: string;
+      }
+
+      interface TestimonialItem {
+        id: string;
+        name: string;
+        location: string;
+        text: string;
+        rating: number;
+      }
+
+      interface FeatureItem {
+        id: string;
+        title: string;
+        description: string;
+        icon: any;
+      }
+
+      // --- CONSTANTS ---
+
+      const NAV_LINKS = [
+        { name: 'Home', href: '#home' },
+        { name: 'About', href: '#about' },
+        { name: 'Services', href: '#services' },
+        { name: 'Portfolio', href: '#portfolio' },
+        { name: 'Why Us', href: '#why-us' },
+        { name: 'Contact', href: '#contact' },
+      ];
+
+      const SERVICES: ServiceItem[] = [
+        {
+          id: '1',
+          title: 'Architectural Design',
+          description: 'Structural integrity meets artistic vision. We design buildings that stand the test of time.',
+          icon: DraftingCompass,
+        },
+        {
+          id: '2',
+          title: 'Residential Interiors',
+          description: 'Transforming houses into homes with personalized, warm, and functional interior concepts.',
+          icon: Home,
+        },
+        {
+          id: '3',
+          title: 'Commercial Interiors',
+          description: 'Productive and inspiring workspaces designed to elevate your brand identity.',
+          icon: Building2,
+        },
+        {
+          id: '4',
+          title: 'Space Planning',
+          description: 'Optimizing layouts for maximum flow, functionality, and aesthetic balance.',
+          icon: Ruler,
+        },
+        {
+          id: '5',
+          title: 'Turnkey Solutions',
+          description: 'End-to-end execution from concept to handover. Bespoke yet affordable.',
+          icon: Key,
+        },
+        {
+          id: '6',
+          title: 'Furniture & Custom Design',
+          description: 'Handpicked and custom-crafted furniture pieces that perfectly fit your space.',
+          icon: Sofa,
+        },
+      ];
+
+      const PROJECTS: ProjectItem[] = [
+        {
+          id: '1',
+          title: 'The Gilded Penthouse',
+          category: 'Residential',
+          imageUrl: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+          id: '2',
+          title: 'Onyx Corporate Office',
+          category: 'Commercial',
+          imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+          id: '3',
+          title: 'Serene Villa Gandhinagar',
+          category: 'Residential',
+          imageUrl: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+          id: '4',
+          title: 'Urban Chic Apartment',
+          category: 'Residential',
+          imageUrl: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4f9d?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+          id: '5',
+          title: 'Minimalist Studio',
+          category: 'Architecture',
+          imageUrl: 'https://images.unsplash.com/photo-1518005020951-ecc859676e0a?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+          id: '6',
+          title: 'Botanic Cafe',
+          category: 'Commercial',
+          imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=800',
+        },
+      ];
+
+      const FEATURES: FeatureItem[] = [
+        {
+          id: '1',
+          title: 'Bespoke & Affordable',
+          description: 'Luxury design tailored to your budget constraints without compromising quality.',
+          icon: Gem,
+        },
+        {
+          id: '2',
+          title: '3D Visualization',
+          description: 'Walk through your future space with our hyper-realistic 3D renders.',
+          icon: Box,
+        },
+        {
+          id: '3',
+          title: 'End-to-End Turnkey',
+          description: 'We handle everything from civil work to the final cushion placement.',
+          icon: CheckCircle2,
+        },
+        {
+          id: '4',
+          title: 'Experienced Team',
+          description: 'Led by architects and designers with decades of collective experience.',
+          icon: Users,
+        },
+        {
+          id: '5',
+          title: 'On-Time Delivery',
+          description: 'We respect your time. Strict timelines and project management are our forte.',
+          icon: Clock,
+        },
+        {
+          id: '6',
+          title: 'Modern Aesthetic',
+          description: 'Contemporary, minimal, and timeless designs that stay relevant.',
+          icon: Palette,
+        },
+      ];
+
+      const TESTIMONIALS: TestimonialItem[] = [
+        {
+          id: '1',
+          name: 'Rajesh Patel',
+          location: 'Ahmedabad',
+          text: 'CASA Interior Studio transformed our villa completely. The attention to detail and the gold accents they suggested added a touch of royalty we didn’t know we needed.',
+          rating: 5,
+        },
+        {
+          id: '2',
+          name: 'Priya Sharma',
+          location: 'Gandhinagar',
+          text: 'Efficient, affordable, and incredibly stylish. Their turnkey solution saved us so much stress. Highly recommended for anyone looking for a premium finish.',
+          rating: 5,
+        },
+        {
+          id: '3',
+          name: 'Ankit Mehta',
+          location: 'Ahmedabad',
+          text: 'The best thing about CASA is their transparency. From 3D designs to final execution, everything was exactly as promised. My office looks stunning.',
+          rating: 5,
+        },
+      ];
+
+      // --- COMPONENT: FadeIn ---
+
+      interface FadeInProps {
+        children: React.ReactNode;
+        delay?: number;
+        className?: string;
+        direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+      }
+
+      const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = '', direction = 'up' }) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const domRef = useRef<HTMLDivElement>(null);
+
+        useEffect(() => {
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                setIsVisible(true);
+                if (domRef.current) {
+                  observer.unobserve(domRef.current);
+                }
+              }
+            });
+          }, { threshold: 0.1 }); 
+
+          const currentElement = domRef.current;
+          if (currentElement) {
+            observer.observe(currentElement);
+          }
+
+          return () => {
+            if (currentElement) {
+              observer.unobserve(currentElement);
+            }
+          };
+        }, []);
+
+        const getTransform = () => {
+          if (!isVisible) {
+            switch (direction) {
+              case 'up': return 'translateY(40px)';
+              case 'down': return 'translateY(-40px)';
+              case 'left': return 'translateX(40px)';
+              case 'right': return 'translateX(-40px)';
+              default: return 'none';
+            }
+          }
+          return 'none';
+        };
+
+        return (
+          <div
+            ref={domRef}
+            className={`${className} transition-all duration-1000 ease-out`}
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: getTransform(),
+              transitionDelay: `${delay}ms`
+            }}
+          >
+            {children}
+          </div>
+        );
+      };
+
+      // --- COMPONENT: Navbar ---
+
+      const Navbar: React.FC = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [isScrolled, setIsScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        return (
+          <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'py-4 glass-panel bg-casa-dark/80' : 'py-8 bg-transparent'}`}>
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8 flex justify-between items-center">
+              {/* Logo */}
+              <a href="#home" className="text-2xl md:text-3xl font-serif font-bold tracking-wider text-casa-text hover:text-casa-gold transition-colors">
+                CASA<span className="text-casa-gold">.</span>
+              </a>
+
+              {/* Desktop Links */}
+              <div className="hidden md:flex space-x-10 items-center">
+                {NAV_LINKS.map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={link.href} 
+                    className="text-sm uppercase tracking-widest font-medium text-casa-muted hover:text-casa-gold transition-colors duration-300"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+                <a href="#contact" className="px-6 py-2 border border-casa-gold text-casa-gold rounded-full hover:bg-casa-gold hover:text-casa-dark transition-all duration-300 text-sm font-medium">
+                  Get Quote
+                </a>
+              </div>
+
+              {/* Mobile Toggle */}
+              <button 
+                className="md:hidden text-casa-text hover:text-casa-gold"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {isOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
+
+            {/* Mobile Menu */}
+            <div className={`md:hidden absolute top-full left-0 w-full bg-casa-dark border-b border-white/10 transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-96 py-6' : 'max-h-0 py-0'}`}>
+              <div className="flex flex-col items-center space-y-6">
+                {NAV_LINKS.map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={link.href} 
+                    className="text-lg font-serif text-casa-muted hover:text-casa-gold"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </nav>
+        );
+      };
+
+      // --- COMPONENT: Hero ---
+
+      const Hero: React.FC = () => {
+        return (
+          <section id="home" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+              <img 
+                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=2600" 
+                alt="Luxury Interior" 
+                className="w-full h-full object-cover"
+              />
+              {/* Dark Overlay with Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-casa-dark/80 via-casa-dark/60 to-casa-dark/95"></div>
+            </div>
+
+            <div className="relative z-10 w-full max-w-[1120px] px-6 md:px-8 text-center md:text-left pt-20">
+              <FadeIn delay={100} direction="up">
+                <p className="text-casa-gold uppercase tracking-[0.2em] text-sm md:text-base mb-4">
+                  Ahmedabad • Gandhinagar
+                </p>
+              </FadeIn>
+              
+              <FadeIn delay={300} direction="up">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-casa-text leading-tight mb-6">
+                  CASA <br className="hidden md:block"/> 
+                  <span className="italic font-light">Interior</span> Studio
+                </h1>
+              </FadeIn>
+
+              <FadeIn delay={500} direction="up">
+                <div className="h-1 w-24 bg-casa-gold mb-8 mx-auto md:mx-0"></div>
+                <p className="text-casa-muted text-lg md:text-xl max-w-2xl font-light mb-10 mx-auto md:mx-0">
+                  Architectural Design • Interior Design • Space Planning <br/> 
+                  Bespoke & Affordable Turnkey Solutions
+                </p>
+              </FadeIn>
+
+              <FadeIn delay={700} direction="up" className="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
+                <a 
+                  href="#contact" 
+                  className="group px-8 py-4 bg-casa-gold text-casa-dark font-semibold rounded-2xl hover:bg-white transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  Get a Free Consultation
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </a>
+                <a 
+                  href="#portfolio" 
+                  className="px-8 py-4 bg-white/5 backdrop-blur-sm border border-white/10 text-casa-text font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300"
+                >
+                  View Our Work
+                </a>
+              </FadeIn>
+            </div>
+
+            {/* Scroll indicator */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+              <div className="w-[1px] h-16 bg-gradient-to-b from-casa-gold to-transparent"></div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: About ---
+
+      const About: React.FC = () => {
+        return (
+          <section id="about" className="py-24 bg-casa-dark overflow-hidden">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                {/* Image Side */}
+                <FadeIn direction="right" className="relative">
+                  <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
+                    <img 
+                      src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=2000" 
+                      alt="Architect planning" 
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                  {/* Floating Card */}
+                  <div className="absolute -bottom-10 -right-6 md:-right-10 w-48 p-6 glass-panel rounded-xl hidden md:block">
+                    <p className="text-4xl font-serif text-casa-gold mb-1">10+</p>
+                    <p className="text-casa-muted text-sm uppercase tracking-wider">Years of Excellence</p>
+                  </div>
+                </FadeIn>
+
+                {/* Text Side */}
+                <FadeIn direction="left">
+                  <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Who We Are</h4>
+                  <h2 className="text-4xl md:text-5xl font-serif text-casa-text mb-8 leading-tight">
+                    Crafting Spaces that <span className="text-casa-gold italic">Inspire</span> Living.
+                  </h2>
+                  <p className="text-casa-muted text-lg mb-6 font-light leading-relaxed">
+                    At CASA Interior Studio, we are a team of experienced architects and interior designers dedicated to transforming visions into reality. Based in Ahmedabad & Gandhinagar, we specialize in delivering bespoke yet affordable turnkey solutions.
+                  </p>
+                  <p className="text-casa-muted text-lg mb-8 font-light leading-relaxed">
+                    We believe that luxury lies in the details. Our approach combines modern functionality with aesthetic elegance, ensuring every square foot is optimized for your lifestyle. Whether it's a cozy home or a dynamic workspace, we design with purpose.
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+                    <div>
+                      <h3 className="text-xl font-serif text-casa-text mb-2">Modern</h3>
+                      <p className="text-sm text-casa-muted">Contemporary designs that stay ahead of trends.</p>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-serif text-casa-text mb-2">Functional</h3>
+                      <p className="text-sm text-casa-muted">Optimized layouts for effortless living.</p>
+                    </div>
+                  </div>
+                </FadeIn>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: Services ---
+
+      const Services: React.FC = () => {
+        return (
+          <section id="services" className="py-24 bg-casa-dark relative">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <FadeIn className="text-center mb-16">
+                <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Our Expertise</h4>
+                <h2 className="text-4xl md:text-5xl font-serif text-casa-text">Services We Provide</h2>
+              </FadeIn>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {SERVICES.map((service, index) => {
+                  const Icon = service.icon;
+                  return (
+                    <FadeIn key={service.id} delay={index * 100} className="h-full">
+                      <div className="group glass-panel p-8 rounded-2xl h-full transition-all duration-300 hover:bg-white/10 hover:-translate-y-2 cursor-pointer">
+                        <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                          <Icon className="text-casa-gold" size={28} strokeWidth={1.5} />
+                        </div>
+                        <h3 className="text-xl font-serif text-casa-text mb-4 group-hover:text-casa-gold transition-colors">
+                          {service.title}
+                        </h3>
+                        <p className="text-casa-muted text-sm leading-relaxed font-light">
+                          {service.description}
+                        </p>
+                      </div>
+                    </FadeIn>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: Portfolio ---
+
+      const Portfolio: React.FC = () => {
+        return (
+          <section id="portfolio" className="py-24 bg-[#080b0f]">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+                <FadeIn direction="right">
+                  <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Our Portfolio</h4>
+                  <h2 className="text-4xl md:text-5xl font-serif text-casa-text">Selected Works</h2>
+                </FadeIn>
+                <FadeIn direction="left" delay={200}>
+                  <a href="#contact" className="hidden md:flex items-center gap-2 text-casa-text hover:text-casa-gold transition-colors mt-6 md:mt-0">
+                    View Full Portfolio <ArrowUpRight size={18} />
+                  </a>
+                </FadeIn>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[400px]">
+                {PROJECTS.map((project, index) => (
+                  <FadeIn 
+                    key={project.id} 
+                    delay={index * 100} 
+                    className={`relative group rounded-2xl overflow-hidden ${
+                      index === 1 || index === 4 ? "md:col-span-1 lg:row-span-2 md:h-[824px]" : ""
+                    }`}
+                  >
+                    <div className="w-full h-full relative overflow-hidden rounded-2xl">
+                      <img 
+                        src={project.imageUrl} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                      
+                      <div className="absolute bottom-0 left-0 p-8 w-full translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="text-casa-gold text-xs uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                          {project.category}
+                        </p>
+                        <h3 className="text-2xl font-serif text-white group-hover:text-casa-gold transition-colors">
+                          {project.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+              
+              <div className="mt-12 text-center md:hidden">
+                <a href="#" className="inline-flex items-center gap-2 text-casa-text hover:text-casa-gold transition-colors">
+                   View Full Portfolio <ArrowUpRight size={18} />
+                </a>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: WhyChooseUs ---
+
+      const WhyChooseUs: React.FC = () => {
+        return (
+          <section id="why-us" className="py-24 bg-casa-dark relative overflow-hidden">
+            {/* Decorative background element */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-casa-gold/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8 relative z-10">
+              <FadeIn className="text-center mb-16 max-w-2xl mx-auto">
+                <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Why Choose Us</h4>
+                <h2 className="text-4xl font-serif text-casa-text mb-6">Redefining Luxury Through Precision & Passion</h2>
+              </FadeIn>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {FEATURES.map((feature, index) => {
+                  const Icon = feature.icon;
+                  return (
+                    <FadeIn key={feature.id} delay={index * 50}>
+                      <div className="flex gap-5 p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300">
+                        <div className="shrink-0">
+                          <div className="w-12 h-12 rounded-xl bg-casa-gold/10 flex items-center justify-center text-casa-gold">
+                            <Icon size={24} />
+                          </div>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-serif text-casa-text mb-2">{feature.title}</h3>
+                          <p className="text-casa-muted text-sm font-light leading-relaxed">
+                            {feature.description}
+                          </p>
+                        </div>
+                      </div>
+                    </FadeIn>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: Testimonials ---
+
+      const Testimonials: React.FC = () => {
+        return (
+          <section className="py-24 bg-[#090c10] border-y border-white/5">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <FadeIn className="text-center mb-16">
+                <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Testimonials</h4>
+                <h2 className="text-4xl md:text-5xl font-serif text-casa-text">Client Stories</h2>
+              </FadeIn>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {TESTIMONIALS.map((t, index) => (
+                  <FadeIn key={t.id} delay={index * 150} className="h-full">
+                    <div className="glass-panel p-8 rounded-2xl h-full flex flex-col relative group">
+                      <Quote className="absolute top-6 right-6 text-white/5 group-hover:text-casa-gold/20 transition-colors" size={48} />
+                      
+                      <div className="flex gap-1 mb-6">
+                        {[...Array(t.rating)].map((_, i) => (
+                          <Star key={i} size={16} className="fill-casa-gold text-casa-gold" />
+                        ))}
+                      </div>
+                      
+                      <p className="text-casa-text text-lg font-light italic mb-8 flex-grow">"{t.text}"</p>
+                      
+                      <div className="border-t border-white/10 pt-6 mt-auto">
+                        <h5 className="text-casa-text font-serif text-lg">{t.name}</h5>
+                        <p className="text-casa-gold text-sm uppercase tracking-wider">{t.location}</p>
+                      </div>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: Contact ---
+
+      const Contact: React.FC = () => {
+        return (
+          <section id="contact" className="py-24 bg-casa-dark relative">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
+                <FadeIn direction="right">
+                  <h4 className="text-casa-gold uppercase tracking-[0.2em] text-sm mb-4">Get In Touch</h4>
+                  <h2 className="text-4xl md:text-5xl font-serif text-casa-text mb-8">Let's Discuss Your Project</h2>
+                  <p className="text-casa-muted text-lg mb-12 font-light">
+                    Ready to transform your space? Contact us for a free consultation. We serve clients across Ahmedabad and Gandhinagar.
+                  </p>
+
+                  <div className="space-y-8">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                        <Phone className="text-casa-gold" size={20} />
+                      </div>
+                      <div>
+                        <h5 className="text-casa-text font-serif text-lg mb-1">Phone</h5>
+                        <p className="text-casa-muted">+91 98765 43210</p>
+                        <p className="text-casa-muted">+91 91234 56789</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                        <Mail className="text-casa-gold" size={20} />
+                      </div>
+                      <div>
+                        <h5 className="text-casa-text font-serif text-lg mb-1">Email</h5>
+                        <p className="text-casa-muted">hello@casainterior.studio</p>
+                        <p className="text-casa-muted">projects@casainterior.studio</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                        <MapPin className="text-casa-gold" size={20} />
+                      </div>
+                      <div>
+                        <h5 className="text-casa-text font-serif text-lg mb-1">Studio</h5>
+                        <p className="text-casa-muted">101, Luxury Heights, S.G. Highway,</p>
+                        <p className="text-casa-muted">Ahmedabad, Gujarat - 380015</p>
+                      </div>
+                    </div>
+                  </div>
+                </FadeIn>
+
+                <FadeIn direction="left" delay={200}>
+                  <form className="glass-panel p-8 md:p-10 rounded-3xl space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label htmlFor="name" className="text-sm text-casa-muted uppercase tracking-wider">Full Name</label>
+                        <input type="text" id="name" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors" placeholder="John Doe" />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="phone" className="text-sm text-casa-muted uppercase tracking-wider">Phone Number</label>
+                        <input type="tel" id="phone" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors" placeholder="+91 ..." />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm text-casa-muted uppercase tracking-wider">Email</label>
+                        <input type="email" id="email" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors" placeholder="john@example.com" />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="city" className="text-sm text-casa-muted uppercase tracking-wider">City</label>
+                        <select id="city" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors appearance-none">
+                          <option className="bg-casa-dark text-gray-400">Select City</option>
+                          <option className="bg-casa-dark">Ahmedabad</option>
+                          <option className="bg-casa-dark">Gandhinagar</option>
+                          <option className="bg-casa-dark">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="project" className="text-sm text-casa-muted uppercase tracking-wider">Project Type</label>
+                      <select id="project" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors appearance-none">
+                        <option className="bg-casa-dark text-gray-400">Select Project Type</option>
+                        <option className="bg-casa-dark">Residential Interior</option>
+                        <option className="bg-casa-dark">Commercial Interior</option>
+                        <option className="bg-casa-dark">Architectural Design</option>
+                        <option className="bg-casa-dark">Turnkey Project</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm text-casa-muted uppercase tracking-wider">Message</label>
+                      <textarea id="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors" placeholder="Tell us a bit about your vision..."></textarea>
+                    </div>
+
+                    <button type="submit" className="w-full py-4 bg-casa-gold text-casa-dark font-semibold rounded-xl hover:bg-white transition-all duration-300">
+                      Send Message
+                    </button>
+                  </form>
+                </FadeIn>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // --- COMPONENT: Footer ---
+
+      const Footer: React.FC = () => {
+        return (
+          <footer className="bg-[#020304] border-t border-white/5 pt-16 pb-8">
+            <div className="max-w-[1120px] mx-auto px-6 md:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
+                
+                {/* Brand */}
+                <div className="space-y-6">
+                  <a href="#home" className="text-3xl font-serif font-bold tracking-wider text-casa-text">
+                    CASA<span className="text-casa-gold">.</span>
+                  </a>
+                  <p className="text-casa-muted text-sm font-light max-w-xs leading-relaxed">
+                    Premium Architecture & Interior Design Studio delivering bespoke turnkey solutions in Ahmedabad & Gandhinagar.
+                  </p>
+                  <div className="flex gap-4">
+                    <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-casa-text hover:bg-casa-gold hover:text-casa-dark transition-all duration-300">
+                      <Instagram size={18} />
+                    </a>
+                    <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-casa-text hover:bg-casa-gold hover:text-casa-dark transition-all duration-300">
+                      <Facebook size={18} />
+                    </a>
+                    <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-casa-text hover:bg-casa-gold hover:text-casa-dark transition-all duration-300">
+                      <Linkedin size={18} />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Quick Links */}
+                <div className="md:pl-10">
+                  <h4 className="text-casa-text font-serif text-lg mb-6">Quick Links</h4>
+                  <ul className="space-y-4">
+                    {NAV_LINKS.map(link => (
+                      <li key={link.name}>
+                        <a href={link.href} className="text-casa-muted text-sm hover:text-casa-gold transition-colors">
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Locations */}
+                <div>
+                   <h4 className="text-casa-text font-serif text-lg mb-6">Locations</h4>
+                   <ul className="space-y-4 text-casa-muted text-sm font-light">
+                     <li className="flex items-start gap-2">
+                       <span className="text-casa-gold">•</span> Ahmedabad (Head Office)
+                     </li>
+                     <li className="flex items-start gap-2">
+                       <span className="text-casa-gold">•</span> Gandhinagar (Branch)
+                     </li>
+                     <li className="mt-4 opacity-50">
+                       Working Hours: <br/>
+                       Mon - Sat: 10:00 AM - 7:00 PM
+                     </li>
+                   </ul>
+                </div>
+              </div>
+
+              <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p className="text-xs text-casa-muted/60 font-light">
+                  © {new Date().getFullYear()} CASA Interior Studio. All rights reserved.
+                </p>
+                <div className="flex gap-6 text-xs text-casa-muted/60">
+                  <a href="#" className="hover:text-casa-text">Privacy Policy</a>
+                  <a href="#" className="hover:text-casa-text">Terms of Service</a>
+                </div>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      // --- APP COMPONENT ---
+
+      function App() {
+        return (
+          <div className="min-h-screen bg-casa-dark text-casa-text font-sans selection:bg-casa-gold selection:text-white">
+            <Navbar />
+            <main>
+              <Hero />
+              <About />
+              <Services />
+              <Portfolio />
+              <WhyChooseUs />
+              <Testimonials />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        );
+      }
+
+      // --- MOUNT ---
+
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<App />);
+      }
+    </script>
+  </body>
+</html>

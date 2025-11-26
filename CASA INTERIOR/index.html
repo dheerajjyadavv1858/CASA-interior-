@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CASA INTERIOR STUDIO | Premium Interior Design</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Tailwind Config -->
     <script>
       tailwind.config = {
         theme: {
@@ -41,7 +38,6 @@
       }
     </script>
     
-    <!-- Custom Styles -->
     <style>
       body {
         background-color: #050709;
@@ -61,23 +57,33 @@
         background: rgba(255, 255, 255, 0.06);
         border-color: rgba(201, 162, 107, 0.3);
       }
+      /* Hide scrollbar for cleaner look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050709;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #c9a26b;
+      }
     </style>
 
-    <!-- React & Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- Import Map for Modules -->
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "lucide-react": "https://esm.sh/lucide-react@0.292.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.292.0"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -92,37 +98,6 @@
         Instagram, Facebook, Linkedin, Twitter 
       } from 'lucide-react';
 
-      // --- TYPES ---
-      
-      interface ServiceItem {
-        id: string;
-        title: string;
-        description: string;
-        icon: any;
-      }
-
-      interface ProjectItem {
-        id: string;
-        title: string;
-        category: string;
-        imageUrl: string;
-      }
-
-      interface TestimonialItem {
-        id: string;
-        name: string;
-        location: string;
-        text: string;
-        rating: number;
-      }
-
-      interface FeatureItem {
-        id: string;
-        title: string;
-        description: string;
-        icon: any;
-      }
-
       // --- CONSTANTS ---
 
       const NAV_LINKS = [
@@ -134,7 +109,7 @@
         { name: 'Contact', href: '#contact' },
       ];
 
-      const SERVICES: ServiceItem[] = [
+      const SERVICES = [
         {
           id: '1',
           title: 'Architectural Design',
@@ -173,7 +148,7 @@
         },
       ];
 
-      const PROJECTS: ProjectItem[] = [
+      const PROJECTS = [
         {
           id: '1',
           title: 'The Gilded Penthouse',
@@ -212,7 +187,7 @@
         },
       ];
 
-      const FEATURES: FeatureItem[] = [
+      const FEATURES = [
         {
           id: '1',
           title: 'Bespoke & Affordable',
@@ -251,7 +226,7 @@
         },
       ];
 
-      const TESTIMONIALS: TestimonialItem[] = [
+      const TESTIMONIALS = [
         {
           id: '1',
           name: 'Rajesh Patel',
@@ -277,16 +252,9 @@
 
       // --- COMPONENT: FadeIn ---
 
-      interface FadeInProps {
-        children: React.ReactNode;
-        delay?: number;
-        className?: string;
-        direction?: 'up' | 'down' | 'left' | 'right' | 'none';
-      }
-
-      const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = '', direction = 'up' }) => {
+      const FadeIn = ({ children, delay = 0, className = '', direction = 'up' }) => {
         const [isVisible, setIsVisible] = useState(false);
-        const domRef = useRef<HTMLDivElement>(null);
+        const domRef = useRef(null);
 
         useEffect(() => {
           const observer = new IntersectionObserver(entries => {
@@ -342,7 +310,7 @@
 
       // --- COMPONENT: Navbar ---
 
-      const Navbar: React.FC = () => {
+      const Navbar = () => {
         const [isOpen, setIsOpen] = useState(false);
         const [isScrolled, setIsScrolled] = useState(false);
 
@@ -408,7 +376,7 @@
 
       // --- COMPONENT: Hero ---
 
-      const Hero: React.FC = () => {
+      const Hero = () => {
         return (
           <section id="home" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
             {/* Background Image */}
@@ -471,7 +439,7 @@
 
       // --- COMPONENT: About ---
 
-      const About: React.FC = () => {
+      const About = () => {
         return (
           <section id="about" className="py-24 bg-casa-dark overflow-hidden">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -524,7 +492,7 @@
 
       // --- COMPONENT: Services ---
 
-      const Services: React.FC = () => {
+      const Services = () => {
         return (
           <section id="services" className="py-24 bg-casa-dark relative">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -560,7 +528,7 @@
 
       // --- COMPONENT: Portfolio ---
 
-      const Portfolio: React.FC = () => {
+      const Portfolio = () => {
         return (
           <section id="portfolio" className="py-24 bg-[#080b0f]">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -608,7 +576,7 @@
               
               <div className="mt-12 text-center md:hidden">
                 <a href="#" className="inline-flex items-center gap-2 text-casa-text hover:text-casa-gold transition-colors">
-                   View Full Portfolio <ArrowUpRight size={18} />
+                    View Full Portfolio <ArrowUpRight size={18} />
                 </a>
               </div>
             </div>
@@ -618,7 +586,7 @@
 
       // --- COMPONENT: WhyChooseUs ---
 
-      const WhyChooseUs: React.FC = () => {
+      const WhyChooseUs = () => {
         return (
           <section id="why-us" className="py-24 bg-casa-dark relative overflow-hidden">
             {/* Decorative background element */}
@@ -659,7 +627,7 @@
 
       // --- COMPONENT: Testimonials ---
 
-      const Testimonials: React.FC = () => {
+      const Testimonials = () => {
         return (
           <section className="py-24 bg-[#090c10] border-y border-white/5">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -697,7 +665,7 @@
 
       // --- COMPONENT: Contact ---
 
-      const Contact: React.FC = () => {
+      const Contact = () => {
         return (
           <section id="contact" className="py-24 bg-casa-dark relative">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -760,7 +728,7 @@
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div className="space-y-2">
+                        <div className="space-y-2">
                         <label htmlFor="email" className="text-sm text-casa-muted uppercase tracking-wider">Email</label>
                         <input type="email" id="email" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-casa-text focus:border-casa-gold focus:outline-none transition-colors" placeholder="john@example.com" />
                       </div>
@@ -804,7 +772,7 @@
 
       // --- COMPONENT: Footer ---
 
-      const Footer: React.FC = () => {
+      const Footer = () => {
         return (
           <footer className="bg-[#020304] border-t border-white/5 pt-16 pb-8">
             <div className="max-w-[1120px] mx-auto px-6 md:px-8">
@@ -847,19 +815,19 @@
 
                 {/* Locations */}
                 <div>
-                   <h4 className="text-casa-text font-serif text-lg mb-6">Locations</h4>
-                   <ul className="space-y-4 text-casa-muted text-sm font-light">
-                     <li className="flex items-start gap-2">
-                       <span className="text-casa-gold">•</span> Ahmedabad (Head Office)
-                     </li>
-                     <li className="flex items-start gap-2">
-                       <span className="text-casa-gold">•</span> Gandhinagar (Branch)
-                     </li>
-                     <li className="mt-4 opacity-50">
-                       Working Hours: <br/>
-                       Mon - Sat: 10:00 AM - 7:00 PM
-                     </li>
-                   </ul>
+                    <h4 className="text-casa-text font-serif text-lg mb-6">Locations</h4>
+                    <ul className="space-y-4 text-casa-muted text-sm font-light">
+                      <li className="flex items-start gap-2">
+                        <span className="text-casa-gold">•</span> Ahmedabad (Head Office)
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-casa-gold">•</span> Gandhinagar (Branch)
+                      </li>
+                      <li className="mt-4 opacity-50">
+                        Working Hours: <br/>
+                        Mon - Sat: 10:00 AM - 7:00 PM
+                      </li>
+                    </ul>
                 </div>
               </div>
 
